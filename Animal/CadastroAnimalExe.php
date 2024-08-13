@@ -48,6 +48,16 @@
         <div class="principal">
             <?php
             include('../includes/conexao.php');
+
+            $nome_foto = "";
+            if(file_exists($_FILES['foto']['tmp_name'])){
+                $pasta_destino = 'fotos/';
+                $extensao = strtolower(substr($_FILES['foto']['name'], -4));
+                $nome_foto = $pasta_detino . date('Ymd-His').$extensao;
+                move_uploaded_file($_FILES['foto']['tmp_name'],$nome_foto);
+                
+            }
+
             $nome = $_POST['nome'];
             $especie = $_POST['especie'];
             $raca = $_POST['raca'];
@@ -65,7 +75,7 @@
             $castrado = $castrado ? 0 : 1;
             $dataNascimentoFormatada = date('Y-m-d', strtotime($dataNascimento));
             $sql = "INSERT INTO animal (nome, especie, raca, data_nascimento, castrado, id_pessoa)";
-            $sql .= " VALUES('" . $nome . "', '" . $especie . "', '" . $raca . "', '" . $dataNascimentoFormatada . "', $castrado, $pessoa)";
+            $sql .= " VALUES('" . $nome . "', '" . $especie . "', '" . $raca . "', '" . $dataNascimentoFormatada . "', $castrado, $pessoa, '$nome_foto')";
             echo $sql;
             // Executa comando no banco de dados
             $result =  mysqli_query($con, $sql);
